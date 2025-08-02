@@ -8,6 +8,7 @@
 
      <!-- Menu Item -->
         <menuitem id="menu_tower_dashboard" name="Dashboard" parent="menu_tower_root"
-               action="action_tower_dashboard"/>
+               action="action_tower_dashboard"
+               groups="base.group_system,tower_london.group_tower_specialist"/>/>
     </data>
 </odoo>
