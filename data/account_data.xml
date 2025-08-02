@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="account_tower_income" model="account.account">
+        <field name="name">Tower Test Income</field>
+        <field name="code">410000</field>
+        <field name="account_type">income</field>
+    </record>
+</odoo>

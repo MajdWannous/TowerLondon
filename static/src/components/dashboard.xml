@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="tower_london.TowerDashboard" owl="1">
+            <div class="o_container">
+        <h2>Select Patient</h2>
+        <div class="btn-group mb-3 flex-wrap">
+            <t t-foreach="state.patients" t-as="p" t-key="p">
+                <button class="btn btn-outline-primary m-1"
+                        t-on-click="selectPatient"
+                        t-att-data-patient="p"
+                        t-att-class="state.selectedPatient === p ? 'active btn-primary' : ''">
+                    <t t-esc="p"/>
+                </button>
+            </t>
+        </div>
+        <canvas t-ref="chartRef" class="w-100" style="max-height: 400px;"/>
+
+    </div>
+    </t>
+</templates>

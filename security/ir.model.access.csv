@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tower_patient_receptionist,tower.patient.receptionist,tower_london.model_tower_patient,tower_london.group_tower_receptionist,1,1,1,1
+access_tower_test_receptionist,tower.test.receptionist,tower_london.model_tower_of_london,tower_london.group_tower_receptionist,1,1,1,1
+access_tower_patient_specialist,tower.patient.specialist,tower_london.model_tower_patient,tower_london.group_tower_specialist,1,0,0,0
+access_tower_test_specialist,tower.test.specialist,tower_london.model_tower_of_london,tower_london.group_tower_specialist,1,0,0,0
+access_account_move_finance,tower.account.move.finance,account.model_account_move,tower_london.group_tower_finance,1,1,1,1
+access_tower_patient_finance,tower.patient.finance,tower_london.model_tower_patient,tower_london.group_tower_finance,0,0,0,0
+access_tower_test_finance_read_only,tower.test.finance.read.only,tower_london.model_tower_of_london,tower_london.group_tower_finance,1,0,0,0
+access_tower_patient_admin,tower.patient.admin,tower_london.model_tower_patient,base.group_system,1,1,1,1
+access_tower_test_admin,tower.test.admin,tower_london.model_tower_of_london,base.group_system,1,1,1,1
+access_tower_norm_table_admin,tower.norm.table.admin,tower_london.model_tower_norm_table,base.group_system,1,1,1,1
+access_account_move_admin,tower.account.move.admin,account.model_account_move,base.group_system,1,1,1,1

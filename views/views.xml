@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+                <!--Table Tree-->
+    <record id="view_tower_norm_table_tree" model="ir.ui.view">
+    <field name="name">tower.norm.table.tree</field>
+    <field name="model">tower.norm.table</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="norm_type"/>
+            <field name="age"/>
+            <field name="mean"/>
+            <field name="std_dev"/>
+        </tree>
+    </field>
+</record>
+                    <!-- Table Form-->
+<record id="view_tower_norm_table_form" model="ir.ui.view">
+    <field name="name">tower.norm.table.form</field>
+    <field name="model">tower.norm.table</field>
+    <field name="arch" type="xml">
+        <form>
+            <group>
+                <field name="norm_type"/>
+                <field name="age"/>
+                <field name="mean"/>
+                <field name="std_dev"/>
+            </group>
+        </form>
+    </field>
+</record>
+              <!-- Form View Patient-->
+    <record id="view_tower_patient_form" model="ir.ui.view">
+        <field name="name">tower.patient.form</field>
+        <field name="model">tower.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="birth_date"/>
+                        <field name="gender"/>
+                        <field name="parent_phone"/>
+                        <field name="parent_id"/>
+                    </group>
+                    <notebook>
+                            <page string="Tower of London Tests">
+                                 <field name="test_ids">
+                                     <tree editable="bottom">
+                                         <field name="test_date"/>
+                                         <field name="attempts_score"/>
+                                         <field name="time_score"/>
+                                         <field name="attempts_result" readonly="1"/>
+                                         <field name="time_result" readonly="1"/>
+                                         <field name="progress_summary" readonly="1"/>
+
+                                     </tree>
+                                 </field>
+                            </page>
+                            <page string="Invoices">
+                                  <field name="invoice_ids">
+                                       <tree>
+                                           <field name="name"/>
+                                           <field name="invoice_date"/>
+                                           <field name="amount_total"/>
+                                           <field name="state"/>
+                                       </tree>
+                                  </field>
+                            </page>
+                            <page string="Invoices" groups="tower_london.group_tower_finance">
+                                  <field name="invoice_ids">
+                                       <tree>
+                                           <field name="name"/>
+                                           <field name="invoice_date"/>
+                                           <field name="amount_total"/>
+                                           <field name="state"/>
+                                       </tree>
+                                  </field>
+                            </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+                <!-- Tree View Patient-->
+    <record id="view_tower_patient_tree" model="ir.ui.view">
+        <field name="name">tower.patient.tree</field>
+        <field name="model">tower.patient</field>
+        <field name="arch" type="xml">
+            <tree string="Patient">
+                        <field name="name"/>
+                        <field name="birth_date"/>
+                        <field name="gender"/>
+                        <field name="parent_phone"/>
+            </tree>
+        </field>
+    </record>
+               <!-- Form View Test With Report Button -->
+    <record id="view_tower_of_london_form" model="ir.ui.view">
+        <field name="name">tower.of.london.form</field>
+        <field name="model">tower.of.london</field>
+        <field name="arch" type="xml">
+            <form string="Tower Of London Test">
+                <header>
+                   <button name="action_delete_return"
+                           string="Delete"
+                           type="object"
+                           class="btn-danger"
+                           confirm="Are you sure?"/>
+                    <button name="open_invoice"
+                            string="View Invoice"
+                            type="object"
+                            groups="tower_london.group_tower_finance"
+                            invisible="1"
+                            modifiers="{'invisible': [['show_invoice_button', '=', False]]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="patient_id"/>
+                        <field name="test_date"/>
+                    </group>
+
+                    <group string="Score">
+                        <field name="attempts_score"/>
+                        <field name="time_score"/>
+                    </group>
+
+                    <group string="Age">
+                        <field name="age_years" readonly="1"/>
+                        <field name="age_months" readonly="1"/>
+                    </group>
+
+                    <group name="z_score_group" string="Z-Score">
+                        <field name="attempts_z" readonly="1"/>
+                        <field name="attempts_result" readonly="1"/>
+                        <field name="time_z" readonly="1"/>
+                        <field name="time_result" readonly="1"/>
+                    </group>
+                    <group string="Invoice">
+                    <field name="invoice_id" readonly="1"/>
+                    <button name="open_invoice" string="View Invoice" type="object"
+                         invisible="1" modifiers="{'invisible': [['show_invoice_button', '=', False]]}"/>
+                </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+                    <!-- Tree View Test-->
+    <record id="view_tower_of_london_tree" model="ir.ui.view">
+        <field name="name">view.tower.of.london.tree</field>
+        <field name="model">tower.of.london</field>
+        <field name="arch" type="xml">
+            <tree string="Tower of London Tests">
+                <field name="patient_id"/>
+                <field name="test_date"/>
+                <field name="attempts_score"/>
+                <field name="attempts_result"/>
+                <field name="time_score"/>
+                <field name="time_result"/>
+                <field name="progress_summary" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+              <!-- Report Template-->
+
+                     <!-- Actions-->
+    <record id="action_tower_norm_table" model="ir.actions.act_window">
+    <field name="name">Normative Table</field>
+    <field name="res_model">tower.norm.table</field>
+    <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record id="action_tower_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">tower.patient</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record id="action_tower_of_london" model="ir.actions.act_window">
+        <field name="name">Tower of london</field>
+        <field name="res_model">tower.of.london</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+             <!--Menu-->
+    <menuitem id="menu_tower_root" name="Tower System"/>
+
+    <menuitem id="menu_tower_patient" name="Patients" parent="menu_tower_root"
+              action="action_tower_patient"/>
+
+    <menuitem id="menu_tower_test" name="Tower Tests" parent="menu_tower_root"
+              action="action_tower_of_london"/>
+
+    <menuitem id="menu_tower_norm_table" name="Normative Table" parent="menu_tower_root"
+          action="action_tower_norm_table" groups="base.group_system"/>
+
+</odoo>

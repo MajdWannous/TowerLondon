@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_tower_dashboard" model="ir.actions.client">
+            <field name="name">Tower Dashboard</field>
+            <field name="tag">tower_london.dashboard</field>
+        </record>
+
+     <!-- Menu Item -->
+        <menuitem id="menu_tower_dashboard" name="Dashboard" parent="menu_tower_root"
+               action="action_tower_dashboard"/>
+    </data>
+</odoo>
