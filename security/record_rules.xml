@@ -20,24 +20,34 @@
       <field name="groups" eval="[(4, ref('tower_london.group_tower_receptionist'))]"/>
       <field name="domain_force">[(1,'=',1)]</field>
       <field name="perm_read" eval="1"/>
-      <field name="perm_write" eval="1"/>
-      <field name="perm_create" eval="1"/>
-      <field name="perm_unlink" eval="1"/>
-    </record>
-
-    <!-- 🟠 Specialist Rules -->
-    <record id="rule_specialist_test_access" model="ir.rule">
-      <field name="name">Specialist: Own Tests Only</field>
-      <field name="model_id" ref="model_tower_of_london"/>
-      <field name="groups" eval="[(4, ref('tower_london.group_tower_specialist'))]"/>
-      <field name="domain_force">[('create_uid', '=', user.id)]</field>
-      <field name="perm_read" eval="1"/>
       <field name="perm_write" eval="0"/>
       <field name="perm_create" eval="0"/>
       <field name="perm_unlink" eval="0"/>
     </record>
 
+    <!-- 🟠 Specialist Rules -->
+    <record id="rule_specialist_test_access" model="ir.rule">
+      <field name="name">Specialist</field>
+      <field name="model_id" ref="model_tower_of_london"/>
+      <field name="groups" eval="[(4, ref('tower_london.group_tower_specialist'))]"/>
+      <field name="domain_force">[(1, '=', 1)]</field>
+      <field name="perm_read" eval="1"/>
+      <field name="perm_write" eval="1"/>
+      <field name="perm_create" eval="1"/>
+      <field name="perm_unlink" eval="1"/>
+    </record>
+
     <!-- 🔵 Finance Rules -->
+    <record id="rule_finance_patient_access" model="ir.rule">
+      <field name="name">Finance: Can access Patients</field>
+      <field name="model_id" ref="model_tower_patient"/>
+      <field name="groups" eval="[(4, ref('tower_london.group_tower_finance'))]"/>
+      <field name="domain_force">[(1, '=', 1)]</field> <!-- يشوف كل المرضى -->
+      <field name="perm_read" eval="1"/>
+      <field name="perm_write" eval="0"/>
+      <field name="perm_create" eval="0"/>
+      <field name="perm_unlink" eval="0"/>
+    </record>
     <record id="rule_finance_tower_invoices" model="ir.rule">
       <field name="name">Finance: Tower Invoices Only</field>
       <field name="model_id" ref="account.model_account_move"/>
@@ -48,6 +58,7 @@
       <field name="perm_create" eval="1"/>
       <field name="perm_unlink" eval="1"/>
     </record>
+
 
   </data>
 </odoo>

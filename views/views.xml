@@ -44,7 +44,8 @@
                         <field name="parent_id"/>
                     </group>
                     <notebook>
-                            <page string="Tower of London Tests">
+                            <page string="Tower of London Tests"
+                                  groups="tower_london.group_tower_specialist,tower_london.group_tower_receptionist,base.group_system">
                                  <field name="test_ids">
                                      <tree editable="bottom">
                                          <field name="test_date"/>
@@ -57,18 +58,8 @@
                                      </tree>
                                  </field>
                             </page>
-                            <page string="Invoices">
-                                  <field name="invoice_ids">
-                                       <tree>
-                                           <field name="name"/>
-                                           <field name="invoice_date"/>
-                                           <field name="amount_total"/>
-                                           <field name="state"/>
-                                       </tree>
-                                  </field>
-                            </page>
-                            <page string="Invoices" groups="tower_london.group_tower_finance">
-                                  <field name="invoice_ids">
+                            <page string="Invoices" groups="tower_london.group_tower_finance,base.group_system">
+                                  <field name="invoice_ids" context="{'default_tower_patient_id': active_id}">
                                        <tree>
                                            <field name="name"/>
                                            <field name="invoice_date"/>
@@ -78,7 +69,6 @@
                                   </field>
                             </page>
                     </notebook>
-
                 </sheet>
             </form>
         </field>
@@ -117,32 +107,35 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="patient_id"/>
-                        <field name="test_date"/>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="test_date"/>
+                        </group>
+
+                        <group string="Score">
+                            <field name="attempts_score"/>
+                            <field name="time_score"/>
+                        </group>
                     </group>
 
-                    <group string="Score">
-                        <field name="attempts_score"/>
-                        <field name="time_score"/>
-                    </group>
+                    <group>
+                        <group string="Age">
+                            <field name="age_years" readonly="1"/>
+                            <field name="age_months" readonly="1"/>
+                        </group>
 
-                    <group string="Age">
-                        <field name="age_years" readonly="1"/>
-                        <field name="age_months" readonly="1"/>
+                        <group name="z_score_group" string="Z-Score">
+                            <field name="attempts_z" readonly="1"/>
+                            <field name="attempts_result" readonly="1"/>
+                            <field name="time_z" readonly="1"/>
+                            <field name="time_result" readonly="1"/>
+                        </group>
                     </group>
-
-                    <group name="z_score_group" string="Z-Score">
-                        <field name="attempts_z" readonly="1"/>
-                        <field name="attempts_result" readonly="1"/>
-                        <field name="time_z" readonly="1"/>
-                        <field name="time_result" readonly="1"/>
+                    <group string="Invoice" groups="tower_london.group_tower_finance,base.group_system">
+                        <field name="invoice_id" readonly="1"/>
+                        <button name="open_invoice" string="View Invoice" type="object"
+                          invisible="1" modifiers="{'invisible': [['show_invoice_button', '=', False]]}"/>
                     </group>
-                    <group string="Invoice">
-                    <field name="invoice_id" readonly="1"/>
-                    <button name="open_invoice" string="View Invoice" type="object"
-                         invisible="1" modifiers="{'invisible': [['show_invoice_button', '=', False]]}"/>
-                </group>
-
                 </sheet>
             </form>
         </field>
@@ -195,7 +188,8 @@
               action="action_tower_patient"/>
 
     <menuitem id="menu_tower_test" name="Tower Tests" parent="menu_tower_root"
-              action="action_tower_of_london"/>
+              action="action_tower_of_london"
+    groups="tower_london.group_tower_specialist,base.group_system"/>
 
     <menuitem id="menu_tower_norm_table" name="Normative Table" parent="menu_tower_root"
           action="action_tower_norm_table" groups="base.group_system"/>

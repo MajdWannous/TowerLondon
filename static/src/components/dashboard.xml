@@ -1,20 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
-    <t t-name="tower_london.TowerDashboard" owl="1">
-            <div class="o_container">
-        <h2>Select Patient</h2>
-        <div class="btn-group mb-3 flex-wrap">
-            <t t-foreach="state.patients" t-as="p" t-key="p">
-                <button class="btn btn-outline-primary m-1"
-                        t-on-click="selectPatient"
-                        t-att-data-patient="p"
-                        t-att-class="state.selectedPatient === p ? 'active btn-primary' : ''">
-                    <t t-esc="p"/>
-                </button>
-            </t>
-        </div>
-        <canvas t-ref="chartRef" class="w-100" style="max-height: 400px;"/>
+  <t t-name="tower_london.TowerDashboard" owl="1">
+    <div class="o_container">
+      <h2 class="mb-3">Tower Dashboard</h2>
 
+      <!-- الإحصائيات -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card text-center bg-light p-2">
+            <h4>Total Patients</h4>
+            <p t-esc="state.stats.total_patients" />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center bg-light p-2">
+            <h4>Total Invoices</h4>
+            <p t-esc="state.stats.total_invoices" />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center bg-light p-2">
+            <h4>Improved Tests</h4>
+            <p t-esc="state.stats.improved_tests" />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center bg-light p-2">
+            <h4>Regressed Tests</h4>
+            <p t-esc="state.stats.regressed_tests" />
+          </div>
+        </div>
+      </div>
+
+      <!-- بحث المريض -->
+      <h2>Select Patient</h2>
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          placeholder="Search patient..."
+          class="form-control w-50"
+          t-on-input="filterPatients"
+          t-model="state.searchTerm"
+        />
+      </div>
+
+      <!-- اختيار المريض -->
+      <div class="form-group mb-4">
+        <select class="form-control w-50" t-on-change="selectPatientFromDropdown" t-model="state.selectedPatient">
+          <option disabled="true" t-if="!state.selectedPatient" value="">-- Select Patient --</option>
+          <t t-foreach="state.filteredPatients" t-as="p" t-key="p">
+            <option t-att-value="p" t-att-selected="state.selectedPatient === p">
+              <t t-esc="p" />
+            </option>
+          </t>
+        </select>
+      </div>
+
+      <!-- الرسم البياني -->
+      <canvas t-ref="chartRef" class="w-100" style="max-height: 400px;" />
     </div>
-    </t>
+  </t>
 </templates>

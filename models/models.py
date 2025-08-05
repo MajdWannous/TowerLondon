@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from datetime import date
 
+
 class TowerNormTable(models.Model):
     _name = 'tower.norm.table'
     _description = 'Tower Normative Table (Attempts and Time)'
@@ -83,6 +84,14 @@ class TowerOfLondonTest(models.Model):
                 compute='_compute_progress_summary',
                 store=True)
     invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True)
+    specialist_id = fields.Many2one('res.users', string='Specialist')
+
+    RESULT_RANKING = {
+        'below': 0,
+        'borderline': 1,
+        'within': 2,
+        'above': 3,
+    }
 
     @api.depends('invoice_id')
     def _compute_show_invoice_button(self):
@@ -153,10 +162,10 @@ class TowerOfLondonTest(models.Model):
                 rec.progress_summary = "First Test"
                 continue
 
-            att_current = rec.attempts_result
-            time_current = rec.time_result
-            att_prev = previous.attempts_result
-            time_prev = previous.time_result
+            att_current = self.RESULT_RANKING.get(rec.attempts_result, 0)
+            time_current =self.RESULT_RANKING.get(rec.time_result, 0)
+            att_prev = self.RESULT_RANKING.get(previous.attempts_result, 0)
+            time_prev = self.RESULT_RANKING.get(previous.time_result, 0)
 
             att_change = (att_current > att_prev) - (att_current < att_prev)
             time_change = (time_current > time_prev) - (time_current < time_prev)
@@ -191,11 +200,16 @@ class TowerOfLondonTest(models.Model):
     def get_dashboard_data(self):
         current_user = self.env.user
         domain = []
-        if not current_user.has_group('base.group_system'):  # ليس أدمن
-            domain = [('specialist_id', '=', current_user.id)]
+        if not current_user.has_group('base.group_system'):
+            domain = []
 
         records = self.search(domain, order='age_years')
         data_by_patient = {}
+
+        total_patients = self.env['tower.patient'].search_count([])
+        total_invoices = self.env['account.move'].search_count([('tower_patient_id', '!=', False)])
+        improved_tests = 0
+        regressed_tests = 0
 
         for rec in records:
             patient_name = rec.patient_id.name or "Unknown"
@@ -205,12 +219,36 @@ class TowerOfLondonTest(models.Model):
                     'z_attempts': [],
                     'z_time': [],
                 }
+
             age = rec.get_reference_age()
             data_by_patient[patient_name]['ages'].append(str(age))
             data_by_patient[patient_name]['z_attempts'].append(rec.attempts_z)
             data_by_patient[patient_name]['z_time'].append(rec.time_z)
 
-        return data_by_patient
+            previous = rec.get_previous_test()
+            if previous:
+                att_change = (self.RESULT_RANKING.get(rec.attempts_result, 0) > self.RESULT_RANKING.get(previous.attempts_result, 0)) - (
+                        self.RESULT_RANKING.get(rec.attempts_result, 0) < self.RESULT_RANKING.get( previous.attempts_result, 0))
+                time_change = (self.RESULT_RANKING.get(rec.time_result, 0) > self.RESULT_RANKING.get(previous.time_result, 0)) - (
+                        self.RESULT_RANKING.get(rec.time_result, 0) < self.RESULT_RANKING.get(previous.time_result, 0))
+
+                if att_change > 0 or time_change > 0:
+                    improved_tests += 1
+                elif att_change < 0 or time_change < 0:
+                    regressed_tests += 1
+
+        return {
+            'patients_data': data_by_patient,
+            'stats': {
+                'total_patients': total_patients,
+                'total_invoices': total_invoices,
+                'improved_tests': improved_tests,
+                'regressed_tests': regressed_tests,
+            }
+        }
+
+
+
 
     def action_delete_return(self):
         self.unlink()
