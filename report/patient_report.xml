@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- QWeb Template -->
+    <template id="report_tower_patient_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="patient">
+                <div class="page">
+                    <div style="text-align: left; margin-top: 10px;">
+                        <img t-att-src="logo_base64" style="width:150px;" alt="Clinic Logo"/>
+                    </div>
+                    <h2 style="color:#1a73e8;">Patient Report</h2>
+                    <p><strong>Name:</strong> <t t-esc="patient.name"/></p>
+                    <p><strong>Birth Date:</strong> <t t-esc="patient.birth_date"/></p>
+                    <p><strong>Gender:</strong> <t t-esc="patient.gender"/></p>
+                    <p><strong>Parent:</strong> <t t-esc="patient.parent_id.name"/></p>
+                    <p><strong>Parent Phone:</strong> <t t-esc="patient.parent_phone"/></p>
+
+                    <h4 style="margin-top:20px;">Tower of London Tests</h4>
+                    <table class="table table-sm table-bordered" style="width:100%;">
+                        <thead style="background:#ddd;">
+                            <tr>
+                                <th>Date</th>
+                                <th>Attempts Result</th>
+                                <th>Time Result</th>
+                                <th>Progress Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="patient.test_ids" t-as="test">
+                                <tr>
+                                    <td><t t-esc="test.test_date"/></td>
+                                    <td><t t-esc="test.attempts_result"/></td>
+                                    <td><t t-esc="test.time_result"/></td>
+                                    <td><t t-esc="test.progress_summary"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report action -->
+
+    <record id="action_report_tower_patient" model="ir.actions.report">
+        <field name="name">Patient Report</field>
+        <field name="model">tower.patient</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tower_london.report_tower_patient_template</field>
+        <field name="report_file">tower_london.report_tower_patient_template</field>
+        <field name="print_report_name">'Patient_Report'</field>
+        <field name="binding_model_id" ref="tower_london.model_tower_patient"/>
+        <field name="binding_type">report</field>
+        <field name="groups_id" eval="[(4, ref('tower_london.group_tower_specialist')), (4, ref('base.group_system'))]"/>
+    </record>
+
+</odoo>

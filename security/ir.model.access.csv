@@ -10,3 +10,6 @@ access_tower_patient_admin,tower.patient.admin,tower_london.model_tower_patient,
 access_tower_test_admin,tower.test.admin,tower_london.model_tower_of_london,base.group_system,1,1,1,1
 access_tower_norm_table_admin,tower.norm.table.admin,tower_london.model_tower_norm_table,base.group_system,1,1,1,1
 access_account_move_admin,tower.account.move.admin,account.model_account_move,base.group_system,1,1,1,1
+access_z_score_category_admin,z.score.category.admin,tower_london.model_z_score_category,base.group_system,1,1,1,1
+access_res_company_admin,res.company admin,model_res_company,base.group_system,1,1,1,1
+access_res_company_finance,res.company finance,model_res_company,tower_london.group_tower_finance,1,1,1,1

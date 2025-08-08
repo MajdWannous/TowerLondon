@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_clinic_dashboard_template">
+        <t t-call="web.html_container">
+            <t t-set="o" t-value="docs[0]" />
+            <div class="page" style="font-family: Arial, sans-serif; color: #2a3f54; margin: 20px;">
+                <div style="text-align: center; margin-top: 10px;">
+                    <img t-att-src="logo_base64" style="width:150px;" alt="Clinic Logo"/>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <div style="font-size: 22px; font-weight: bold;">Clinic Summary Report</div>
+                    <div style="font-size: 14px; color: #555;">Psychological Analysis Center for Children</div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 30px; font-size: 15px;">
+                    <tr style="background-color: #f5f5f5;">
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Total Patients</th>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="o['stats']['total_patients']"/></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Total Tests</th>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="o['stats']['total_invoices']"/></td>
+                    </tr>
+                    <tr style="background-color: #f5f5f5;">
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Improved Tests</th>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="o['stats']['improved_tests']"/></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Regressed Tests</th>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="o['stats']['regressed_tests']"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <record id="action_report_clinic_dashboard" model="ir.actions.report">
+         <field name="name">Clinic Summary</field>
+         <field name="model">tower.of.london</field>
+         <field name="report_type">qweb-pdf</field>
+         <field name="report_name">tower_london.report_clinic_dashboard_template</field>
+         <field name="report_file">tower_london.report_clinic_dashboard_template</field>
+         <field name="print_report_name">'Clinic_Summary'</field>
+         <field name="binding_model_id" ref="tower_london.model_tower_of_london"/>
+         <field name="binding_type">report</field>
+        <field name="groups_id" eval="(4, ref('base.group_system'))"/>
+
+    </record>
+</odoo>

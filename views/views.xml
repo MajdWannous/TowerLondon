@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
+
+                 <!-- ZScoreCategory (Tree View) -->
+    <record id="view_z_score_category_tree" model="ir.ui.view">
+        <field name="name">z.score.category.tree</field>
+        <field name="model">z.score.category</field>
+        <field name="arch" type="xml">
+            <tree string="Z-Score Categories">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="min_value"/>
+                <field name="max_value"/>
+                <field name="color_box" widget="html"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ZScoreCategory (Form View) -->
+    <record id="view_z_score_category_form" model="ir.ui.view">
+        <field name="name">z.score.category.form</field>
+        <field name="model">z.score.category</field>
+        <field name="arch" type="xml">
+            <form string="Z-Score Category">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="min_value"/>
+                        <field name="max_value"/>
+                        <field name="color" widget="colorpicker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
                 <!--Table Tree-->
     <record id="view_tower_norm_table_tree" model="ir.ui.view">
     <field name="name">tower.norm.table.tree</field>
@@ -75,18 +112,18 @@
     </record>
                 <!-- Tree View Patient-->
     <record id="view_tower_patient_tree" model="ir.ui.view">
-        <field name="name">tower.patient.tree</field>
-        <field name="model">tower.patient</field>
-        <field name="arch" type="xml">
-            <tree string="Patient">
-                        <field name="name"/>
-                        <field name="birth_date"/>
-                        <field name="gender"/>
-                        <field name="parent_phone"/>
-            </tree>
-        </field>
-    </record>
-               <!-- Form View Test With Report Button -->
+    <field name="name">tower.patient.tree</field>
+    <field name="model">tower.patient</field>
+    <field name="arch" type="xml">
+        <tree string="Patients">
+            <field name="name"/>
+            <field name="birth_date"/>
+            <field name="gender"/>
+            <field name="parent_phone"/>
+        </tree>
+    </field>
+</record>
+               <!-- Form View Patient -->
     <record id="view_tower_of_london_form" model="ir.ui.view">
         <field name="name">tower.of.london.form</field>
         <field name="model">tower.of.london</field>
@@ -157,7 +194,21 @@
             </tree>
         </field>
     </record>
-              <!-- Report Template-->
+
+     <!-- Form view to show tower_test_price in res.company -->
+    <record id="view_res_company_tower_settings_form_only_price" model="ir.ui.view">
+    <field name="name">res.company.tower.settings.form.only.price</field>
+    <field name="model">res.company</field>
+    <field name="arch" type="xml">
+        <form string="Tower Test Price Settings">
+            <sheet>
+                <group>
+                    <field name="tower_test_price"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+    </record>
 
                      <!-- Actions-->
     <record id="action_tower_norm_table" model="ir.actions.act_window">
@@ -180,6 +231,30 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="action_z_score_category" model="ir.actions.act_window">
+        <field name="name">Z-Score Categories</field>
+        <field name="res_model">z.score.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_print_all_finance_report" model="ir.actions.server">
+    <field name="name">Print Finance Report</field>
+    <field name="model_id" ref="account.model_account_move"/>
+    <field name="binding_model_id" ref="account.model_account_move"/>
+    <field name="state">code</field>
+    <field name="code">
+        action = env.ref('tower_london.action_finance_report').report_action(env['account.move'].search([]))
+    </field>
+    </record>
+
+    <!-- Action to open the company form (with tower_test_price) -->
+    <record id="action_tower_settings_company_only_price" model="ir.actions.act_window">
+    <field name="name">Tower Settings</field>
+    <field name="res_model">res.company</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_res_company_tower_settings_form_only_price"/>
+    <field name="target">current</field>
+    </record>
+
 
              <!--Menu-->
     <menuitem id="menu_tower_root" name="Tower System"/>
@@ -191,7 +266,22 @@
               action="action_tower_of_london"
     groups="tower_london.group_tower_specialist,base.group_system"/>
 
-    <menuitem id="menu_tower_norm_table" name="Normative Table" parent="menu_tower_root"
+    <menuitem id="menu_tower_sitting" name="Tower Setting" parent="menu_tower_root"
+          groups="base.group_system"/>
+
+    <menuitem id="menu_tower_norm_table" name="Normative Table" parent="menu_tower_sitting"
           action="action_tower_norm_table" groups="base.group_system"/>
+
+
+    <menuitem id="menu_z_score_category" name="Categories" parent="menu_tower_sitting"
+              action="action_z_score_category" groups="base.group_system"/>
+
+    <menuitem id="menu_print_finance_report" name="Print Finance Report"
+          parent="menu_tower_root" action="action_print_all_finance_report"/>
+
+    <!-- Menu item under Tower System for Tower Settings -->
+    <menuitem id="menu_tower_settings" name="Test Price" parent="menu_tower_sitting"
+              action="action_tower_settings_company_only_price"
+              groups="base.group_system"/>
 
 </odoo>

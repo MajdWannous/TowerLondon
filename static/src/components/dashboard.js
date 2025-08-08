@@ -107,6 +107,10 @@ export class TowerDashboard extends Component {
     this.renderChart();
   }
 }
+printClinicReport() {
+
+  window.open('/web#action=tower_london.action_report_clinic_dashboard', '_blank');
+}
 }
 
 const actionRegistry = registry.category("actions");

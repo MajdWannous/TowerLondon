@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
   <t t-name="tower_london.TowerDashboard" owl="1">
-    <div class="o_container">
-      <h2 class="mb-3">Tower Dashboard</h2>
 
-      <!-- الإحصائيات -->
+    <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <h2 class="mb-3" style="font-size: 3rem; font-weight: bold;">Tower Dashboard</h2>
+    <div style="margin-top: 40px; width: 100%;">
+
+      <div style="position: fixed; top: 65px; right: 20px; z-index: 1000;">
+           <button type="button" class="btn btn-primary" t-on-click="printClinicReport">
+            Print Clinic Report
+           </button>
+      </div>
       <div class="row mb-4">
         <div class="col-md-3">
-          <div class="card text-center bg-light p-2">
-            <h4>Total Patients</h4>
-            <p t-esc="state.stats.total_patients" />
+          <div class="card text-white bg-primary p-3 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h5 class="mb-1">Total Patients</h5>
+                <h3 t-esc="state.stats.total_patients" />
+              </div>
+              <i class="fa fa-users fa-2x"></i>
+            </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card text-center bg-light p-2">
-            <h4>Total Invoices</h4>
-            <p t-esc="state.stats.total_invoices" />
+          <div class="card text-white bg-warning p-3 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                 <h5 class="mb-1">Total Invoices</h5>
+                 <h3 t-esc="state.stats.total_invoices" />
+              </div>
+              <i class="fa fa-file-text fa-2x"></i>
+            </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card text-center bg-light p-2">
-            <h4>Improved Tests</h4>
-            <p t-esc="state.stats.improved_tests" />
+          <div class="card text-white bg-success p-3 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between">
+               <div>
+                  <h5 class="mb-1">Improved Tests</h5>
+                  <h3 t-esc="state.stats.improved_tests" />
+               </div>
+               <i class="fa fa-arrow-up fa-2x"></i>
+            </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card text-center bg-light p-2">
-            <h4>Regressed Tests</h4>
-            <p t-esc="state.stats.regressed_tests" />
-          </div>
+           <div class="card text-white bg-danger p-3 shadow-sm">
+              <div class="d-flex align-items-center justify-content-between">
+                 <div>
+                    <h5 class="mb-1">Regressed Tests</h5>
+                    <h3 t-esc="state.stats.regressed_tests" />
+                 </div>
+                 <i class="fa fa-arrow-down fa-2x"></i>
+              </div>
+           </div>
         </div>
       </div>
 
-      <!-- بحث المريض -->
       <h2>Select Patient</h2>
       <div class="form-group mb-2">
         <input
@@ -44,7 +69,6 @@
         />
       </div>
 
-      <!-- اختيار المريض -->
       <div class="form-group mb-4">
         <select class="form-control w-50" t-on-change="selectPatientFromDropdown" t-model="state.selectedPatient">
           <option disabled="true" t-if="!state.selectedPatient" value="">-- Select Patient --</option>
@@ -56,8 +80,8 @@
         </select>
       </div>
 
-      <!-- الرسم البياني -->
       <canvas t-ref="chartRef" class="w-100" style="max-height: 400px;" />
+    </div>
     </div>
   </t>
 </templates>

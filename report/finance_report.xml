@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="finance_report_template">
+     <t t-call="web.html_container">
+      <t t-set="company" t-value="env.user.company_id"/>
+      <div class="page" style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+
+        <!-- Header with logo and title -->
+        <div style="text-align: center; margin-top: 10px;">
+            <img t-att-src="logo_base64" style="width:150px;" alt="Clinic Logo"/>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <div style="font-size: 22px; font-weight: bold;">Clinic Financial Status Report</div>
+          <div style="font-size: 14px; color: #555;">Psychological Analysis Center for Children</div>
+        </div>
+
+        <!-- Financial summary table -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 30px; font-size: 15px;">
+          <tr style="background-color: #f2f2f2;">
+            <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Description</th>
+            <th style="text-align: right; padding: 10px; border: 1px solid #ddd;">Value</th>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Total Number of Invoices</td>
+            <td style="text-align: right; padding: 10px; border: 1px solid #ddd;"><t t-esc="total_invoices"/></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Paid Invoices</td>
+            <td style="text-align: right; padding: 10px; border: 1px solid #ddd;"><t t-esc="paid_invoices"/></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Unpaid Invoices</td>
+            <td style="text-align: right; padding: 10px; border: 1px solid #ddd;"><t t-esc="unpaid_invoices"/></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Total Paid Amount</td>
+            <td style="text-align: right; padding: 10px; border: 1px solid #ddd;"><t t-esc="str(total_paid_amount) + ' $'"/></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Total Unpaid Amount</td>
+            <td style="text-align: right; padding: 10px; border: 1px solid #ddd;"><t t-esc="str(total_unpaid_amount) + ' $'"/></td>
+          </tr>
+        </table>
+
+      </div>
+    </t>
+  </template>
+
+  <record id="action_finance_report" model="ir.actions.report">
+    <field name="name">Financial Report</field>
+    <field name="model">account.move</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">tower_london.finance_report_template</field>
+    <field name="report_file">tower_london.finance_report_template</field>
+    <field name="binding_model_id" ref="account.model_account_move"/>
+    <field name="binding_type">report</field>
+    <field name="print_report_name">'financial_report'</field>
+    <field name="groups_id" eval="[(4, ref('tower_london.group_tower_finance')), (4, ref('base.group_system'))]"/>
+  </record>
+</odoo>
